@@ -1,121 +1,125 @@
-'use client';
-
 import Link from 'next/link';
 
+const cities = [
+  {
+    id: 'ulan-ude',
+    title: 'Улан-Удэ',
+    subtitle: 'Офис на Балтахинова, 17',
+    description: 'Здесь проводим обмен, консультации и часть международных переводов.',
+    notes: ['Личная встреча', 'Быстрые сделки', 'Понятный процесс'],
+    href: '/city/ulan-ude',
+  },
+  {
+    id: 'chita',
+    title: 'Чита',
+    subtitle: 'Работаем по предварительной заявке',
+    description: 'Подходит, если нужен гибкий формат и согласование деталей заранее.',
+    notes: ['По заявке', 'Связь с менеджером', 'Индивидуальный формат'],
+    href: '/city/chita',
+  },
+];
+
+const internationalServices = [
+  'Переводы и расчеты для Таиланда',
+  'Оплата товаров и услуг в Китае',
+  'Помощь с нестандартными платежами',
+];
+
 export default function Cities() {
-  const cities = [
-    {
-      id: 'ulan-ude',
-      title: 'УЛАН-УДЭ',
-      subtitle: 'Офис • Балтахинова 17',
-      description: 'Полный спектр услуг обмена криптовалюты',
-      color: 'neon-cyan',
-      link: '/city/ulan-ude',
-    },
-    {
-      id: 'chita',
-      title: 'ЧИТА',
-      subtitle: 'По заявке',
-      description: 'Персональное сопровождение',
-      color: 'neon-purple',
-      link: '/city/chita',
-    },
-  ];
-
   return (
-    <section id="cities" className="relative py-24 px-6">
-      {/* Grid Lines */}
-      <div className="grid-lines" />
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16 reveal" style={{ opacity: 0 }}>
-          <div className="inline-flex items-center gap-2 mb-6">
-            <div className="w-2 h-2 bg-neon-cyan rounded-full animate-pulse" />
-            <span className="text-neon-cyan text-sm font-bold tracking-widest uppercase">
-              Locations
-            </span>
+    <section id="cities" className="section-shell">
+      <div className="section-inner">
+        <div className="section-head reveal">
+          <div className="eyebrow">
+            <span className="eyebrow-dot" />
+            Где работаем
           </div>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-4 glitch-text" data-text="ВЫБЕРИТЕ">
-            ВЫБЕРИТЕ
+          <h2 className="max-w-3xl text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
+            Улан-Удэ и Чита
           </h2>
-          <p className="text-xl text-text-secondary max-w-3xl mx-auto">
-            Два города. Один сервис. <span className="text-neon-cyan font-semibold">Премиум качество.</span>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
+            В Улан-Удэ работаем через офис, в Чите — по предварительной заявке.
+            Если нужен международный перевод, это тоже можно обсудить.
           </p>
         </div>
 
-        {/* Cyberpunk Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {cities.map((city, index) => (
-            <Link
-              key={city.id}
-              href={city.link}
-              className="group relative reveal"
-              style={{ transitionDelay: `${index * 0.15}s`, opacity: 0 }}
-            >
-              {/* Card */}
-              <div className={`card-cyber ${index === 0 ? 'border-neon-cyan' : 'border-neon-purple'}`}>
-                {/* Glitch Header */}
-                <div className="mb-6">
-                  <h3 className={`text-4xl md:text-5xl font-black ${index === 0 ? 'text-neon-cyan' : 'text-neon-purple'} mb-2 glitch-text`} data-text={city.title}>
-                    {city.title}
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-neon-lime rounded-full animate-pulse" />
-                    <span className="text-neon-lime text-xs font-bold tracking-wider uppercase">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(19rem,0.72fr)]">
+          <div className="grid gap-6 md:grid-cols-2">
+            {cities.map((city, index) => (
+              <article
+                key={city.id}
+                className="surface reveal"
+                style={{ transitionDelay: `${index * 0.12}s` }}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                      Город
+                    </div>
+                    <h3 className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.96)]">
+                      {city.title}
+                    </h3>
+                    <p className="mt-2 text-sm font-medium text-[rgba(217,119,6,0.96)]">
                       {city.subtitle}
-                    </span>
+                    </p>
+                  </div>
+                  <div className="rounded-full border border-[rgba(15,118,110,0.12)] bg-[rgba(15,118,110,0.08)] px-3 py-1 text-sm font-semibold text-[rgba(17,94,89,0.92)]">
+                    В работе
                   </div>
                 </div>
 
-                {/* Description */}
-                <p className="text-text-secondary text-lg mb-8 leading-relaxed">
-                  {city.description}
-                </p>
+                <p className="mt-6 text-base leading-7 text-muted">{city.description}</p>
 
-                {/* Access Button */}
-                <div className={`btn-neon-secondary ${index === 0 ? 'border-neon-cyan text-neon-cyan' : 'border-neon-purple text-neon-purple'}`}>
-                  ДОСТУП
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </div>
-              </div>
+                <ul className="mt-6 space-y-3">
+                  {city.notes.map((note) => (
+                    <li key={note} className="flex items-center gap-3 text-sm text-[rgba(31,26,20,0.82)]">
+                      <span className="h-2 w-2 rounded-full bg-[rgba(217,119,6,0.92)]" />
+                      {note}
+                    </li>
+                  ))}
+                </ul>
 
-              {/* Glow on Hover */}
-              <div className={`absolute -inset-1 -inset-1 rounded-lg bg-gradient-to-br ${index === 0 ? 'from-neon-cyan/20 via-neon-cyan/5 to-transparent' : 'from-neon-purple/20 via-neon-purple/5 to-transparent'} opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500`} />
-            </Link>
-          ))}
-        </div>
+                <Link href={city.href} className="btn-secondary mt-8">
+                  Подробнее
+                </Link>
+              </article>
+            ))}
+          </div>
 
-        {/* Global Card */}
-        <div className="mt-8 max-w-4xl mx-auto reveal" style={{ transitionDelay: '0.4s', opacity: 0 }}>
-          <div className="card-cyber border-neon-pink text-center">
-            <h3 className="text-4xl md:text-5xl font-black text-neon-pink mb-2 glitch-text" data-text="МЕЖДУНАРОДНЫЕ ПЛАТЕЖИ">
-              МЕЖДУНАРОДНЫЕ ПЛАТЕЖИ
+          <aside className="surface-strong reveal" style={{ transitionDelay: '0.18s' }}>
+            <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+              Международные переводы
+            </div>
+            <h3 className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.95)]">
+              Отдельное направление для сложных запросов
             </h3>
-            <p className="text-text-secondary text-lg mb-8">
-              Таиланд • Китай • США • Европа
+            <p className="mt-4 text-base leading-7 text-muted">
+              Если нужен не только обмен, но и перевод за рубеж, сначала смотрим задачу,
+              потом предлагаем рабочий вариант.
             </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              {['🏝️', '💳', '💴', '🌍'].map((icon, i) => (
+
+            <div className="mt-8 space-y-3">
+              {internationalServices.map((item) => (
                 <div
-                  key={i}
-                  className="w-16 h-16 glass-neo border border-white/10 rounded-xl flex items-center justify-center text-3xl hover:border-neon-pink/50 transition-all duration-300 cursor-pointer hover:scale-110"
+                  key={item}
+                  className="rounded-[22px] border border-[rgba(62,43,21,0.1)] bg-[rgba(255,255,255,0.72)] px-4 py-4 text-sm leading-6 text-[rgba(31,26,20,0.84)]"
                 >
-                  {icon}
+                  {item}
                 </div>
               ))}
             </div>
-          </div>
+
+            <a
+              href="https://t.me/Crypto_u_u"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary mt-8"
+            >
+              Обсудить задачу
+            </a>
+          </aside>
         </div>
       </div>
-
-      <style jsx>{`
-        .reveal {
-          animation: slide 0.8s ease forwards;
-        }
-      `}</style>
     </section>
   );
 }

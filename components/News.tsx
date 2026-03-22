@@ -1,90 +1,60 @@
 'use client';
 
-export default function News() {
-  const news = [
-    {
-      date: '20.03.2026',
-      title: 'Открыли офис в Чите',
-      description: 'Теперь можем принимать заявки в Чите и проводить обмены по предварительной договорённости.',
-      badge: 'Новое',
-      icon: '🏢',
-    },
-    {
-      date: '15.03.2026',
-      title: 'Поддержка Solana',
-      description: 'Теперь можно обменивать SOL на рубли и обратно. Фиксированный курс на время сделки.',
-      badge: 'Обновление',
-      icon: '💎',
-    },
-    {
-      date: '10.03.2026',
-      title: 'Ускорение обменов',
-      description: 'Обмены теперь занимают не более 10 минут благодаря новым процедурам.',
-      badge: 'Улучшение',
-      icon: '⚡',
-    },
-  ];
+const news = [
+  {
+    date: '20.03.2026',
+    title: 'Чита подключена как отдельное направление',
+    description: 'Теперь запросы из Читы обрабатываем по заранее согласованному сценарию с понятным временем связи и форматом сделки.',
+    badge: 'Обновление',
+  },
+  {
+    date: '15.03.2026',
+    title: 'Добавили направление по Solana',
+    description: 'Расширили список поддерживаемых активов для клиентов, которым важно быстрое типовое направление без лишних уточнений.',
+    badge: 'Новый актив',
+  },
+  {
+    date: '10.03.2026',
+    title: 'Упростили первичную коммуникацию',
+    description: 'Сократили количество обязательных полей и сделали первый контакт через Telegram или форму короче и понятнее.',
+    badge: 'Процесс',
+  },
+];
 
+export default function News() {
   return (
-    <section className="py-16 px-6 relative">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12 fade-in">
-          <div className="inline-flex items-center gap-2 mb-6">
-            <span className="badge badge-hot">
-              <span className="w-2 h-2 bg-pink-500 rounded-full animate-pulse" />
-              Новости
-            </span>
+    <section className="section-shell">
+      <div className="section-inner">
+        <div className="section-head fade-in text-center md:mx-auto">
+          <div className="eyebrow">
+            <span className="eyebrow-dot" />
+            Обновления
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Последние <span className="gradient-text">обновления</span>
+          <h2 className="text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
+            Обновления сервиса
           </h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Будьте в курсе последних новостей нашего сервиса
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-muted">
+            Коротко о новых направлениях, изменениях в процессе и расширении услуг.
           </p>
         </div>
 
-        {/* News Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-3">
           {news.map((item, index) => (
-            <div
-              key={index}
-              className="card fade-in"
-              style={{ transitionDelay: `${index * 0.1}s`, opacity: 0 }}
+            <article
+              key={item.title}
+              className="surface fade-in"
+              style={{ transitionDelay: `${index * 0.08}s` }}
             >
-              {/* Badge */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
-                  <span className="text-2xl">{item.icon}</span>
-                  <span className="text-xs font-semibold text-indigo-400">{item.badge}</span>
-                </div>
-                <span className="text-sm text-white/50">{item.date}</span>
+              <div className="flex items-center justify-between gap-4">
+                <span className="rounded-full bg-[rgba(15,118,110,0.08)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(17,94,89,0.94)]">
+                  {item.badge}
+                </span>
+                <span className="text-sm text-muted">{item.date}</span>
               </div>
-
-              {/* Title */}
-              <h3 className="text-xl font-bold text-white mb-3">
-                {item.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-white/70 leading-relaxed">
-                {item.description}
-              </p>
-            </div>
+              <h3 className="mt-5 text-2xl font-semibold text-[rgba(31,26,20,0.95)]">{item.title}</h3>
+              <p className="mt-4 text-base leading-7 text-muted">{item.description}</p>
+            </article>
           ))}
-        </div>
-
-        {/* More Button */}
-        <div className="text-center mt-8 fade-in" style={{ transitionDelay: '0.4s', opacity: 0 }}>
-          <a
-            href="#"
-            className="btn-secondary inline-flex items-center gap-2"
-          >
-            Все новости
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
         </div>
       </div>
     </section>

@@ -1,191 +1,142 @@
-'use client';
-
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+
+const trustPoints = [
+  'Встреча в офисе или по договоренности',
+  'Курс и условия обсуждаем заранее',
+  'На связи в Telegram на каждом этапе',
+];
+
+const supportedCurrencies = ['USDT', 'BTC', 'ETH', 'SOL', 'USD', 'CNY'];
 
 export default function Hero() {
-  const [mounted, setMounted] = useState(false);
-  const [textVisible, setTextVisible] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    setTimeout(() => setTextVisible(true), 300);
-  }, []);
-
-  const rates = [
-    { symbol: 'BTC', price: '6,532,000', change: '+2.3%', positive: true },
-    { symbol: 'ETH', price: '352,000', change: '+1.8%', positive: true },
-    { symbol: 'USDT', price: '92.30', change: '-0.1%', positive: false },
-  ];
-
   return (
-    <section className="relative min-h-screen pt-32 pb-20 px-6">
-      {/* Particles Background */}
-      <div className="particle-container" />
-
-      {/* Morph Background */}
-      <div className="morph-bg" />
-
-      {/* Hero Content */}
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Badge */}
-        <div className="flex justify-center mb-12 reveal" style={{ opacity: mounted ? 1 : 0 }}>
-          <div className="inline-flex items-center gap-2 px-4 py-2 glass-neo border border-neon-cyan rounded-full">
-            <div className="w-2 h-2 bg-neon-cyan rounded-full animate-pulse" />
-            <span className="text-sm font-semibold text-neon-cyan tracking-wider uppercase">Neo-Future</span>
+    <section className="section-shell pt-32 md:pt-36">
+      <div className="section-inner grid items-start gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(22rem,0.8fr)]">
+        <div className="reveal">
+          <div className="eyebrow">
+            <span className="eyebrow-dot" />
+            Обмен криптовалюты и международные переводы
           </div>
-        </div>
 
-        {/* Glitch Heading */}
-        <div className="text-center mb-16 reveal" style={{ transitionDelay: '0.1s', opacity: mounted ? 1 : 0 }}>
-          <h1 className="text-6xl md:text-8xl font-black text-white mb-6 tracking-tight leading-tight relative glitch-text" data-text="CRYPTO">
-            <span className="text-gradient-neon">CRYPTO</span>
-            <span className="text-gradient-neon">EXCHANGE</span>
-            <span className="text-neon-cyan">.2077</span>
+          <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-tight text-[rgba(31,26,20,0.96)] md:text-7xl">
+            Обмен криптовалюты в{' '}
+            <span className="gradient-text">Улан-Удэ и Чите</span>
           </h1>
-          <p className="text-2xl md:text-3xl text-text-secondary max-w-4xl mx-auto mb-10 font-light">
-            Обмен криптовалюты в <span className="text-neon-cyan font-semibold">неоновом будущем</span>
+
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-[rgba(106,90,73,0.92)] md:text-xl">
+            Помогаем с обменом USDT, BTC, ETH и переводами за рубеж. Сразу объясняем,
+            как проходит сделка, где встречаемся и что нужно с вашей стороны.
           </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link href="#cities" className="btn-neon inline-flex items-center gap-2 text-lg">
-              Начать обмен
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="#contact" className="btn-primary">
+              Оставить заявку
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Link>
-            <Link href="#contact" className="btn-neon-secondary inline-flex items-center gap-2">
-              Связаться
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-            </Link>
+            <a
+              href="https://t.me/Crypto_u_u"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary"
+            >
+              Написать в Telegram
+            </a>
+          </div>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            <div className="surface-soft">
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                Формат
+              </div>
+              <div className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)]">
+                Офлайн или по заявке
+              </div>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Подберем формат под город, сумму и задачу.
+              </p>
+            </div>
+            <div className="surface-soft">
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                Скорость
+              </div>
+              <div className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)]">
+                От 15 минут
+              </div>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                По обычным направлениям всё проходит быстро.
+              </p>
+            </div>
+            <div className="surface-soft">
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                Связь
+              </div>
+              <div className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)]">
+                Telegram
+              </div>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Можно быстро задать вопрос и согласовать детали.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Cyberpunk Cards Grid */}
-        <div className="grid md:grid-cols-12 gap-6 mb-16">
-          {/* Live Rates - Large Card */}
-          <div className="md:col-span-8 reveal" style={{ transitionDelay: '0.2s', opacity: mounted ? 1 : 0 }}>
-            <div className="card-cyber relative">
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-neon-cyan to-neon-purple rounded-lg flex items-center justify-center">
-                      <svg className="w-6 h-6 text-void-bg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-white">LIVE RATES</h3>
-                      <div className="text-neon-cyan text-xs tracking-wider uppercase">Real-time</div>
-                    </div>
+        <div className="reveal space-y-5" style={{ transitionDelay: '0.1s' }}>
+          <div className="surface-strong">
+            <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+              Что важно
+            </div>
+            <ul className="mt-6 space-y-4">
+              {trustPoints.map((point) => (
+                <li key={point} className="flex gap-3">
+                  <div className="mt-1 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-[rgba(15,118,110,0.12)] text-[rgba(17,94,89,1)]">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1 bg-neon-cyan/10 border border-neon-cyan/30 rounded-full">
-                    <div className="w-2 h-2 bg-neon-cyan rounded-full animate-pulse" />
-                    <span className="text-xs font-semibold text-neon-cyan">LIVE</span>
-                  </div>
-                </div>
+                  <p className="text-base leading-7 text-[rgba(31,26,20,0.88)]">{point}</p>
+                </li>
+              ))}
+            </ul>
 
-                <div className="space-y-4">
-                  {rates.map((rate, index) => (
-                    <div
-                      key={rate.symbol}
-                      className="glass-neo border border-white/5 rounded-xl p-6 hover:border-neon-cyan/50 transition-all duration-300"
-                      style={{ transitionDelay: `${index * 0.1}s` }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="w-14 h-14 bg-gradient-to-br from-neon-purple to-neon-pink rounded-xl flex items-center justify-center text-xl font-bold text-void-bg">
-                            {rate.symbol.slice(0, 2)}
-                          </div>
-                          <div>
-                            <div className="text-2xl font-black text-white font-mono">{rate.price}</div>
-                            <div className="text-sm text-text-tertiary">₽ RUB</div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className={`text-sm font-bold ${rate.positive ? 'text-neon-lime' : 'text-neon-pink'}`}>
-                            {rate.change}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            <div className="mt-8 rounded-[24px] border border-[rgba(62,43,21,0.1)] bg-[rgba(255,255,255,0.7)] p-5">
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(106,90,73,0.8)]">
+                Как проходит сделка
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-3">
+                {[
+                  ['1', 'Заявка', 'Пишете в Telegram или оставляете форму'],
+                  ['2', 'Согласование', 'Уточняем сумму, валюту и формат'],
+                  ['3', 'Обмен', 'Проводим сделку и подтверждаем результат'],
+                ].map(([step, title, text]) => (
+                  <div key={step} className="rounded-[20px] bg-[rgba(244,239,230,0.72)] p-4">
+                    <div className="text-sm font-semibold text-[rgba(17,94,89,0.84)]">Шаг {step}</div>
+                    <div className="mt-2 text-lg font-semibold text-[rgba(31,26,20,0.95)]">{title}</div>
+                    <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Stats - Medium Card */}
-          <div className="md:col-span-4 space-y-6 reveal" style={{ transitionDelay: '0.3s', opacity: mounted ? 1 : 0 }}>
-            <div className="card-cyber p-8">
-              <div className="text-neon-cyan text-sm tracking-wider uppercase mb-6">STATISTICS</div>
-              <div className="space-y-6">
-                <div>
-                  <div className="text-5xl font-black text-gradient-neon mb-2">100K+</div>
-                  <div className="text-text-secondary">Transactions</div>
-                </div>
-                <div>
-                  <div className="text-5xl font-black text-gradient-neon mb-2">98%</div>
-                  <div className="text-text-secondary">Satisfaction</div>
-                </div>
-                <div>
-                  <div className="text-5xl font-black text-gradient-neon mb-2">15m</div>
-                  <div className="text-text-secondary">Avg. Time</div>
-                </div>
-              </div>
+          <div className="surface">
+            <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(106,90,73,0.8)]">
+              Основные направления
             </div>
-
-            {/* Small Features */}
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { icon: '⚡', label: 'FAST' },
-                { icon: '🔒', label: 'SECURE' },
-                { icon: '🌍', label: 'GLOBAL' },
-                { icon: '✨', label: 'PREMIUM' },
-              ].map((feature, index) => (
-                <div
-                  key={index}
-                  className="card-cyber p-6 text-center hover:border-neon-cyan/50 transition-all duration-300"
-                  style={{ transitionDelay: `${(index + 4) * 0.1}s` }}
+            <div className="mt-4 flex flex-wrap gap-3">
+              {supportedCurrencies.map((currency) => (
+                <span
+                  key={currency}
+                  className="rounded-full border border-[rgba(62,43,21,0.12)] bg-[rgba(255,255,255,0.84)] px-4 py-2 text-sm font-semibold text-[rgba(31,26,20,0.82)]"
                 >
-                  <div className="text-4xl mb-2">{feature.icon}</div>
-                  <div className="text-neon-cyan text-sm font-bold tracking-wider uppercase">
-                    {feature.label}
-                  </div>
-                </div>
+                  {currency}
+                </span>
               ))}
             </div>
           </div>
         </div>
-
-        {/* Trust Badges */}
-        <div className="flex justify-center gap-6 flex-wrap reveal" style={{ transitionDelay: '0.4s', opacity: mounted ? 1 : 0 }}>
-          {[
-            { icon: '⭐', label: '4.9 Rating', color: 'neon-yellow' },
-            { icon: '🛡️', label: '100% Secure', color: 'neon-cyan' },
-            { icon: '⚡', label: '15m Exchange', color: 'neon-lime' },
-            { icon: '🌍', label: 'Worldwide', color: 'neon-purple' },
-          ].map((badge, index) => (
-            <div
-              key={index}
-              className="glass-neo border border-white/10 px-6 py-3 flex items-center gap-3 hover:border-neon-cyan/50 transition-all duration-300"
-              style={{ transitionDelay: `${(index + 6) * 0.1}s` }}
-            >
-              <span className="text-2xl">{badge.icon}</span>
-              <span className={`text-${badge.color} text-sm font-semibold tracking-wider uppercase`}>
-                {badge.label}
-              </span>
-            </div>
-          ))}
-        </div>
       </div>
-
-      <style jsx>{`
-        .reveal {
-          animation: slide 0.8s ease forwards;
-        }
-      `}</style>
     </section>
   );
 }

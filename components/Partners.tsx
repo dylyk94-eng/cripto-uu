@@ -1,43 +1,44 @@
 'use client';
 
-export default function Partners() {
-  const partners = [
-    { name: 'CryptoCompare', description: 'API для курсов криптовалют' },
-    { name: 'Telegram', description: 'Мессенджер для связи' },
-    { name: 'Yandex', description: 'Карты и навигация' },
-    { name: 'Mastercard', description: 'Оплата картами' },
-    { name: 'Visa', description: 'Оплата картами' },
-  ];
+const partners = [
+  { name: 'CryptoCompare', description: 'Источник справочных данных по рыночным курсам' },
+  { name: 'Telegram', description: 'Основной канал связи с клиентами' },
+  { name: 'Яндекс Карты', description: 'Навигация и подтверждение локаций' },
+  { name: 'Mastercard', description: 'Поддержка карточных сценариев оплаты' },
+  { name: 'Visa', description: 'Дополнительные варианты расчетов' },
+];
 
+export default function Partners() {
   return (
-    <section className="py-16 px-6 border-t border-white/5">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12 fade-in">
-          <h3 className="text-2xl font-bold text-white mb-4">
-            Мы работаем с лучшими
+    <section className="section-shell pt-12">
+      <div className="section-inner">
+        <div className="section-head fade-in text-center md:mx-auto">
+          <div className="eyebrow">
+            <span className="eyebrow-dot" />
+            Экосистема
+          </div>
+          <h3 className="text-3xl font-semibold text-[rgba(31,26,20,0.95)]">
+            Сервисы и инструменты, на которые мы опираемся в работе
           </h3>
-          <p className="text-white/60 max-w-2xl mx-auto">
-            Наши партнёры гарантируют надёжность и качество услуг
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-muted">
+            Блок без искусственного пафоса: просто перечисление платформ и инструментов,
+            которые помогают в коммуникации, навигации и обработке запросов.
           </p>
         </div>
 
-        {/* Partners Grid */}
-        <div className="grid md:grid-cols-5 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
           {partners.map((partner, index) => (
-            <div
-              key={index}
-              className="glass p-6 rounded-2xl text-center hover:bg-white/10 transition-all fade-in"
-              style={{ transitionDelay: `${index * 0.1}s`, opacity: 0 }}
+            <article
+              key={partner.name}
+              className="surface fade-in text-center"
+              style={{ transitionDelay: `${index * 0.08}s` }}
             >
-              <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center">
-                <span className="text-3xl">
-                  {['💰', '📱', '🗺️', '💳', '💳'][index]}
-                </span>
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[rgba(15,118,110,0.08)] text-sm font-semibold text-[rgba(17,94,89,0.94)]">
+                {partner.name.slice(0, 2).toUpperCase()}
               </div>
-              <h4 className="text-white font-semibold mb-1">{partner.name}</h4>
-              <p className="text-sm text-white/50">{partner.description}</p>
-            </div>
+              <h4 className="mt-4 text-lg font-semibold text-[rgba(31,26,20,0.95)]">{partner.name}</h4>
+              <p className="mt-2 text-sm leading-6 text-muted">{partner.description}</p>
+            </article>
           ))}
         </div>
       </div>

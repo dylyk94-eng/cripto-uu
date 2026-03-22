@@ -1,21 +1,25 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  display: 'swap',
-});
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "CryptoX — Криптообмен будущего",
-  description: "Премиальный криптообмен в Улан-Удэ и Чите. USDT, BTC, ETH, оплата услуг, недвижимости и товаров в Таиланде. Фиксированные курсы, персональное сопровождение.",
-  keywords: ["криптообмен", "USDT", "BTC", "ETH", "Улан-Удэ", "Чита", "Таиланд", "Alipay", "WeChat"],
-  authors: [{ name: "CryptoX" }],
+  title: 'Crypto Exchange | Офлайн криптообмен в Улан-Удэ и Чите',
+  description:
+    'Офлайн обмен USDT, BTC и ETH, международные платежи и сопровождение сделки в Улан-Удэ и Чите.',
+  keywords: [
+    'криптообмен',
+    'USDT',
+    'BTC',
+    'ETH',
+    'Улан-Удэ',
+    'Чита',
+    'международные платежи',
+  ],
+  authors: [{ name: 'Crypto Exchange' }],
   openGraph: {
-    title: "CryptoX — Криптообмен будущего",
-    description: "Премиальный криптообмен в Улан-Удэ и Чите.",
-    type: "website",
+    title: 'Crypto Exchange | Офлайн криптообмен',
+    description:
+      'Офлайн обмен криптовалюты и международные расчеты с личным сопровождением.',
+    type: 'website',
   },
 };
 
@@ -26,9 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={inter.className}>
+      <body>
         <a href="#main" className="skip-link">
-          Перейти к основному содержанию
+          Перейти к содержимому
         </a>
         {children}
       </body>

@@ -1,137 +1,108 @@
-'use client';
+const serviceGroups = [
+  {
+    title: 'Обмен криптовалюты',
+    description:
+      'Работаем с популярными активами и заранее согласуем ключевые параметры сделки.',
+    points: ['USDT, BTC, ETH, SOL', 'Наличные и безналичные сценарии', 'Фиксация условий перед началом'],
+  },
+  {
+    title: 'Международные расчеты',
+    description:
+      'Помогаем закрыть платежи за услуги, товары, недвижимость и частные задачи.',
+    points: ['Таиланд и Китай', 'Консультация по маршруту оплаты', 'Сопровождение нестандартных кейсов'],
+  },
+  {
+    title: 'Личное сопровождение',
+    description:
+      'Если клиенту важна ясность процесса, подключаем менеджера и не оставляем его одного.',
+    points: ['Подготовка до встречи', 'Проверка деталей сделки', 'Связь в Telegram после обмена'],
+  },
+];
+
+const process = [
+  ['Запрос', 'Вы пишете, какую валюту и задачу нужно решить.'],
+  ['Согласование', 'Подтверждаем сумму, курс, город и удобный формат.'],
+  ['Проведение', 'Организуем сделку и фиксируем результат без лишней суеты.'],
+];
 
 export default function Services() {
-  const services = {
-    exchange: {
-      title: "ОБМЕН",
-      icon: "💱",
-      color: "neon-cyan",
-      items: [
-        { name: "BTC → RUB", desc: "Bitcoin" },
-        { name: "ETH → RUB", desc: "Ethereum" },
-        { name: "USDT → RUB", desc: "Tether" },
-        { name: "SOL → RUB", desc: "Solana" },
-      ],
-    },
-    international: {
-      title: "МЕЖДУНАРОДНЫЕ",
-      icon: "🌍",
-      color: "neon-purple",
-      items: [
-        { name: "Таиланд", desc: "Бат, недвижимость" },
-        { name: "Китай", desc: "Alipay, WeChat" },
-        { name: "США", desc: "USD, банковские карты" },
-        { name: "Европа", desc: "EUR, SEPA" },
-      ],
-    },
-    premium: {
-      title: "ПРЕМИУМ",
-      icon: "⭐",
-      color: "neon-pink",
-      items: [
-        { name: "VIP обмен", desc: "Свой менеджер" },
-        { name: "Консультации", desc: "Экспертная помощь" },
-        { name: "Обучение", desc: "Крипто для новичков" },
-        { name: "Безопасность", desc: "2FA, защита" },
-      ],
-    },
-  };
-
   return (
-    <section id="services" className="relative py-24 px-6">
-      {/* Noise Overlay */}
-      <div className="noise-overlay" />
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16 reveal" style={{ opacity: 0 }}>
-          <div className="inline-flex items-center gap-2 mb-6">
-            <div className="w-2 h-2 bg-neon-lime rounded-full animate-pulse" />
-            <span className="text-neon-cyan text-sm font-bold tracking-widest uppercase">
-              Services
-            </span>
+    <section id="services" className="section-shell">
+      <div className="section-inner">
+        <div className="section-head reveal">
+          <div className="eyebrow">
+            <span className="eyebrow-dot" />
+            Услуги и процесс
           </div>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-4">
-            <span className="text-gradient-neon">ПОЛНЫЙ СПЕКТР</span>
+          <h2 className="max-w-3xl text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
+            Основные направления работы и понятный порядок сделки
           </h2>
-          <p className="text-xl text-text-secondary max-w-3xl mx-auto">
-            Все для вашей крипты — от обмена до обучения
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
+            Основные услуги и то, как начинается работа.
           </p>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {Object.entries(services).map(([key, category], catIndex) => (
-            <div
-              key={key}
-              className="reveal"
-              style={{ transitionDelay: `${catIndex * 0.15}s`, opacity: 0 }}
+        <div className="grid gap-6 lg:grid-cols-3">
+          {serviceGroups.map((group, index) => (
+            <article
+              key={group.title}
+              className="surface reveal"
+              style={{ transitionDelay: `${index * 0.12}s` }}
             >
-              {/* Category Header */}
-              <div className="mb-6">
-                <div className={`flex items-center gap-3 mb-4 glass-neo border-${category.color}/30 p-4`}>
-                  <div className="text-4xl">{category.icon}</div>
-                  <h3 className={`text-2xl font-black text-${category.color}`}>
-                    {category.title}
-                  </h3>
-                </div>
-                <div className="h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                Направление {index + 1}
               </div>
-
-              {/* Service Items */}
-              <div className="space-y-4">
-                {category.items.map((item, itemIndex) => (
-                  <div
-                    key={itemIndex}
-                    className={`card-cyber p-6 cursor-pointer group hover:border-${category.color}/50 transition-all duration-300`}
-                    style={{ transitionDelay: `${(catIndex * 0.15) + (itemIndex * 0.05)}s` }}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-10 h-10 rounded-lg bg-gradient-to-br from-${category.color}/20 to-${category.color}/5 flex items-center justify-center group-hover:scale-110 transition-transform`}
-                      >
-                        <svg className="w-5 h-5 text-void-bg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className={`text-lg font-black text-${category.color} mb-1 group-hover:text-${category.color} transition-colors`}>
-                          {item.name}
-                        </h4>
-                        <p className="text-sm text-text-tertiary">
-                          {item.desc}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+              <h3 className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)]">
+                {group.title}
+              </h3>
+              <p className="mt-4 text-base leading-7 text-muted">{group.description}</p>
+              <ul className="mt-6 space-y-3">
+                {group.points.map((point) => (
+                  <li key={point} className="flex gap-3 text-sm leading-6 text-[rgba(31,26,20,0.84)]">
+                    <span className="mt-2 h-2 w-2 rounded-full bg-[rgba(15,118,110,0.86)]" />
+                    {point}
+                  </li>
                 ))}
-              </div>
-            </div>
+              </ul>
+            </article>
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="mt-16 text-center reveal" style={{ transitionDelay: "0.6s", opacity: 0 }}>
-          <p className="text-lg text-text-secondary mb-8">
-            Нужна услуга, которой нет в списке?
-          </p>
-          <a
-            href="#contact"
-            className="btn-neon inline-flex items-center gap-2 text-xl"
-          >
-            СВЯЗАТЬСЯ С НАМИ
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </a>
+        <div className="surface-strong mt-8 reveal" style={{ transitionDelay: '0.2s' }}>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] lg:items-start">
+            <div>
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                Как мы работаем
+              </div>
+              <h3 className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.95)]">
+                Как проходит сделка
+              </h3>
+              <p className="mt-4 text-base leading-7 text-muted">
+                Сначала получаем запрос, затем согласуем детали и только после этого
+                проводим обмен. Такой порядок помогает клиенту понимать следующий шаг
+                и спокойно принимать решение.
+              </p>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              {process.map(([title, text], index) => (
+                <div
+                  key={title}
+                  className="rounded-[24px] border border-[rgba(62,43,21,0.1)] bg-[rgba(255,255,255,0.74)] p-5"
+                >
+                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[rgba(217,119,6,0.92)]">
+                    Шаг {index + 1}
+                  </div>
+                  <div className="mt-3 text-xl font-semibold text-[rgba(31,26,20,0.95)]">
+                    {title}
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-muted">{text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
-      <style jsx>{`
-        .reveal {
-          animation: slide 0.8s ease forwards;
-        }
-      `}</style>
     </section>
   );
 }

@@ -1,60 +1,79 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams, notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
+import AnimatedBackground from '@/components/AnimatedBackground';
+import Contact from '@/components/Contact';
+import CustomCursor from '@/components/CustomCursor';
+import FAQ from '@/components/FAQ';
+import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Marquee from '@/components/Marquee';
-import Contact from '@/components/Contact';
-import Testimonials from '@/components/Testimonials';
-import FAQ from '@/components/FAQ';
-import Services from '@/components/Services';
-import Footer from '@/components/Footer';
-import CustomCursor from '@/components/CustomCursor';
-import AnimatedBackground from '@/components/AnimatedBackground';
 import ScrollProgress from '@/components/ScrollProgress';
+import Services from '@/components/Services';
+import Testimonials from '@/components/Testimonials';
 
 const cities = {
   'ulan-ude': {
     name: 'Улан-Удэ',
-    title: 'Криптообмен в Улан-Удэ',
-    description: 'Покупка, продажа и обмен криптовалюты в премиальном формате. Работаем с USDT, BTC, ETH и другими активами.',
-    seoTitle: 'CryptoX — обмен криптовалюты в Улан-Удэ',
-    seoDescription: 'CryptoX в Улан-Удэ: Балтахинова, 17. Покупка, продажа и обмен криптовалюты, платежи в Таиланд, выдача бат, пополнение Alipay, WeChat и банковских карт Китая.',
-    offices: [
-      {
-        address: 'ул. Балтахинова, 17',
-        schedule: 'Ежедневно · 12:00–18:00',
-        contact: '@Crypto_u_u',
-        image: '/offices/ulan-ude-main.png',
-      },
-    ],
+    title: 'Офлайн криптообмен в Улан-Удэ',
+    description:
+      'Обмен USDT, BTC, ETH и других активов в понятном офлайн-формате. Подходит для разовых сделок, регулярного обмена и международных расчетов.',
+    officeLabel: 'Офис на Балтахинова, 17',
+    leadCta: 'Обсудить обмен в Улан-Удэ',
     stats: {
-      clients: '5000+',
-      transactions: '80000+',
-      rating: '4.9',
+      clients: '5 000+',
+      transactions: '80 000+',
+      rating: '4.9/5',
     },
   },
-  'chita': {
+  chita: {
     name: 'Чита',
-    title: 'Криптообмен в Чите',
-    description: 'Принимаем заявки на покупку, продажу и обмен криптовалюты, а также на международные расчёты по Таиланду и Китаю.',
-    seoTitle: 'CryptoX — обмен криптовалюты в Чите',
-    seoDescription: 'CryptoX в Чите: покупка, продажа и обмен криптовалюты, платежи в Таиланд, выдача бат, Alipay, WeChat и банковские карты Китая.',
-    offices: [
-      {
-        address: 'По предварительной заявке',
-        schedule: 'По согласованию с менеджером',
-        contact: '@Crypto_u_u',
-        image: '/offices/chita-main.png',
-      },
-    ],
+    title: 'Криптообмен в Чите по предварительной заявке',
+    description:
+      'Для клиентов из Читы организуем сделку по согласованному сценарию: заранее подтверждаем сумму, направление обмена и удобный формат связи.',
+    officeLabel: 'Работаем по согласованной заявке',
+    leadCta: 'Оставить заявку в Чите',
     stats: {
-      clients: '2000+',
-      transactions: '20000+',
-      rating: '4.8',
+      clients: '2 000+',
+      transactions: '20 000+',
+      rating: '4.8/5',
     },
   },
 };
+
+const cityBenefits = [
+  {
+    icon: 'Офис',
+    title: 'Понятный формат сделки',
+    description: 'До начала обмена вы знаете, где проходит встреча, какой курс зафиксирован и кто сопровождает процесс.',
+  },
+  {
+    icon: 'Срок',
+    title: 'Быстрая коммуникация',
+    description: 'Большинство вопросов закрываем в Telegram без длинной переписки и формальных цепочек.',
+  },
+  {
+    icon: 'Курс',
+    title: 'Прозрачные условия',
+    description: 'Сначала согласуем детали, потом проводим сделку. Без неожиданных комиссий и меняющихся вводных.',
+  },
+  {
+    icon: 'Маршрут',
+    title: 'Поддержка нестандартных задач',
+    description: 'Если нужен не только обмен, но и международный расчет, подбираем рабочий маршрут под ваш кейс.',
+  },
+  {
+    icon: 'Связь',
+    title: 'Личный контакт',
+    description: 'Вы общаетесь не с обезличенным интерфейсом, а с менеджером, который ведет сделку до результата.',
+  },
+  {
+    icon: 'Темп',
+    title: 'Подходит для регулярных клиентов',
+    description: 'Если вы меняете криптовалюту часто, можно выстроить понятный и повторяемый формат взаимодействия.',
+  },
+];
 
 export default function CityPage() {
   const params = useParams();
@@ -62,25 +81,21 @@ export default function CityPage() {
   const city = cities[slug as keyof typeof cities];
 
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
-    };
+    const elements = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, observerOptions);
+    elements.forEach((element) => observer.observe(element));
 
-    const fadeElements = document.querySelectorAll('.fade-in');
-    fadeElements.forEach((el) => observer.observe(el));
-
-    return () => {
-      fadeElements.forEach((el) => observer.unobserve(el));
-    };
+    return () => observer.disconnect();
   }, []);
 
   if (!city) {
@@ -96,39 +111,30 @@ export default function CityPage() {
       <Header />
 
       <main id="main" className="relative z-10" tabIndex={-1}>
-        {/* Hero */}
-        <section className="pt-24 pb-16 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="max-w-3xl fade-in">
-              <div className="inline-flex items-center gap-2 mb-6">
-                <span className="badge">📍 {city.name}</span>
+        <section className="section-shell pt-32 md:pt-36">
+          <div className="section-inner">
+            <div className="surface-strong fade-in max-w-5xl">
+              <div className="eyebrow">
+                <span className="eyebrow-dot" />
+                {city.name} • {city.officeLabel}
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="max-w-4xl text-5xl font-semibold leading-tight text-[rgba(31,26,20,0.96)] md:text-6xl">
                 <span className="gradient-text">{city.title}</span>
               </h1>
-              <p className="text-xl text-white/70 mb-8">
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-muted">
                 {city.description}
               </p>
-              <div className="flex gap-4 flex-wrap">
+              <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href="https://t.me/Crypto_u_u"
                   target="_blank"
-                  rel="noopener"
-                  className="btn-primary inline-flex items-center gap-2"
+                  rel="noopener noreferrer"
+                  className="btn-primary"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.751-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.121.099.154.232.169.325.015.093.034.305.019.471z"/>
-                  </svg>
                   Написать в Telegram
                 </a>
-                <a
-                  href="#contact"
-                  className="btn-secondary inline-flex items-center gap-2"
-                >
+                <a href="#contact" className="btn-secondary">
                   Оставить заявку
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
                 </a>
               </div>
             </div>
@@ -137,54 +143,60 @@ export default function CityPage() {
 
         <Marquee />
 
-        {/* Stats */}
-        <section className="py-12 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
-                { value: city.stats.clients, label: 'Довольных клиентов', icon: '👥' },
-                { value: city.stats.transactions, label: 'Успешных транзакций', icon: '📊' },
-                { value: city.stats.rating, label: 'Средний рейтинг', icon: '⭐' },
-              ].map((stat, i) => (
-                <div
-                  key={i}
-                  className="card text-center fade-in"
-                  style={{ transitionDelay: `${i * 0.1}s`, opacity: 0 }}
-                >
-                  <div className="text-4xl mb-3">{stat.icon}</div>
-                  <div className="text-4xl font-bold gradient-text mb-2">{stat.value}</div>
-                  <div className="text-white/70">{stat.label}</div>
+        <section className="section-shell py-12">
+          <div className="section-inner grid gap-6 md:grid-cols-3">
+            {[
+              { value: city.stats.clients, label: 'Клиентов обратились повторно или по рекомендации' },
+              { value: city.stats.transactions, label: 'Сделок проведено по типовым и нестандартным направлениям' },
+              { value: city.stats.rating, label: 'Средняя оценка сервиса по отзывам клиентов' },
+            ].map((stat, index) => (
+              <div
+                key={stat.label}
+                className="surface-soft fade-in"
+                style={{ transitionDelay: `${index * 0.08}s` }}
+              >
+                <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                  Показатель
                 </div>
-              ))}
-            </div>
+                <div className="mt-3 text-4xl font-semibold text-[rgba(31,26,20,0.95)]">
+                  {stat.value}
+                </div>
+                <p className="mt-3 text-sm leading-6 text-muted">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* Features */}
-        <section className="py-16 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12 fade-in">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Почему выбирают <span className="gradient-text">{city.name}</span>
+        <section className="section-shell pt-8">
+          <div className="section-inner">
+            <div className="section-head fade-in">
+              <div className="eyebrow">
+                <span className="eyebrow-dot" />
+                Почему выбирают нас
+              </div>
+              <h2 className="text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
+                Почему клиентам подходит такой формат работы
               </h2>
+              <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
+                На странице города собраны ключевые преимущества: понятный процесс,
+                личный контакт и поддержка по нестандартным запросам.
+              </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                { icon: '🏢', title: 'Собственный офис', desc: 'Встречаемся лично в удобном месте' },
-                { icon: '⚡', title: 'Быстро', desc: 'Обмен за 15 минут без задержек' },
-                { icon: '💰', title: 'Лучший курс', desc: 'Фиксируем курс на время сделки' },
-                { icon: '👨‍💼', title: 'Персональный менеджер', desc: 'Поддержка на каждом этапе' },
-                { icon: '🔒', title: 'Безопасно', desc: '100% защита ваших средств' },
-                { icon: '📱', title: 'Связь 24/7', desc: 'Всегда на связи в Telegram' },
-              ].map((feature, i) => (
+
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {cityBenefits.map((item, index) => (
                 <div
-                  key={i}
-                  className="card fade-in"
-                  style={{ transitionDelay: `${(i + 3) * 0.1}s`, opacity: 0 }}
+                  key={item.title}
+                  className="surface fade-in"
+                  style={{ transitionDelay: `${index * 0.08}s` }}
                 >
-                  <div className="text-5xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                  <p className="text-white/70 leading-relaxed">{feature.desc}</p>
+                  <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(217,119,6,0.92)]">
+                    {item.icon}
+                  </div>
+                  <h3 className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 text-base leading-7 text-muted">{item.description}</p>
                 </div>
               ))}
             </div>
@@ -192,29 +204,26 @@ export default function CityPage() {
         </section>
 
         <Services />
-
         <Testimonials />
-
         <FAQ />
-
         <Contact />
 
-        <div className="py-12 px-6">
-          <div className="max-w-7xl mx-auto text-center fade-in">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Готовы начать обменять криптовалюту в {city.name}?
-            </h3>
-            <a
-              href="#contact"
-              className="btn-primary inline-flex items-center gap-2 text-lg px-10 py-4"
-            >
-              Оставить заявку сейчас
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
+        <section className="section-shell pt-8">
+          <div className="section-inner">
+            <div className="surface-strong fade-in text-center">
+              <h3 className="text-3xl font-semibold text-[rgba(31,26,20,0.95)]">
+                {city.leadCta}
+              </h3>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-muted">
+                Напишите в Telegram или отправьте форму. Дальше мы подскажем удобный формат,
+                согласуем детали и проведем сделку без лишней суеты.
+              </p>
+              <a href="#contact" className="btn-primary mt-8">
+                Перейти к заявке
+              </a>
+            </div>
           </div>
-        </div>
+        </section>
       </main>
 
       <Footer />

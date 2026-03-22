@@ -1,89 +1,66 @@
 'use client';
 
-export default function Advantages() {
-  const advantages = [
-    {
-      icon: '🔒',
-      title: 'Безопасность',
-      description: '100% защита ваших средств и личной информации',
-    },
-    {
-      icon: '⚡',
-      title: 'Скорость',
-      description: 'Обмен криптовалюты за 15 минут',
-    },
-    {
-      icon: '💰',
-      title: 'Лучший курс',
-      description: 'Фиксированный курс на время сделки',
-    },
-    {
-      icon: '👨‍💼',
-      title: 'Менеджер 24/7',
-      description: 'Персональное сопровождение на каждом этапе',
-    },
-    {
-      icon: '🌍',
-      title: 'Международные',
-      description: 'Оплата в Таиланде, Китае и других странах',
-    },
-    {
-      icon: '✅',
-      title: 'Надёжность',
-      description: '98% довольных клиентов за 2024 год',
-    },
-  ];
+const advantages = [
+  {
+    title: 'Прозрачный сценарий',
+    description: 'До начала сделки клиент понимает, что произойдет дальше, кто на связи и какие условия уже согласованы.',
+  },
+  {
+    title: 'Спокойная коммуникация',
+    description: 'Без перегруженных обещаний и без давления. Главная задача текста здесь — снизить тревогу, а не создать искусственный ажиотаж.',
+  },
+  {
+    title: 'Поддержка по нестандартным кейсам',
+    description: 'Если запрос не укладывается в типовой обмен, можно обсудить отдельный маршрут работы.',
+  },
+  {
+    title: 'Офлайн-формат',
+    description: 'Для части клиентов важно личное присутствие и человеческий контакт. Это отражено в тексте и в структуре страницы.',
+  },
+  {
+    title: 'Быстрый первый контакт',
+    description: 'Telegram и короткая форма дают понятный вход без длинных брифов и лишних барьеров.',
+  },
+  {
+    title: 'Текст, который не подрывает доверие',
+    description: 'Понятные формулировки, спокойная подача и акцент на сути услуги.',
+  },
+];
 
+export default function Advantages() {
   return (
-    <section id="services" className="py-20 px-6 relative">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Почему <span className="gradient-text">выбирают</span> нас
+    <section id="services" className="section-shell">
+      <div className="section-inner">
+        <div className="section-head fade-in text-center md:mx-auto">
+          <div className="eyebrow">
+            <span className="eyebrow-dot" />
+            Преимущества
+          </div>
+          <h2 className="text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
+            Почему клиенты возвращаются
           </h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Мы создаём лучший опыт обмена криптовалюты
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-muted">
+            Несколько причин, по которым сервис удобен для типовых обменов и нестандартных запросов.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {advantages.map((advantage, i) => (
-            <div
-              key={i}
-              className="card fade-in"
-              style={{ transitionDelay: `${i * 0.1}s`, opacity: 0 }}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {advantages.map((advantage, index) => (
+            <article
+              key={advantage.title}
+              className="surface fade-in"
+              style={{ transitionDelay: `${index * 0.08}s` }}
             >
-              <div className="text-5xl mb-6">{advantage.icon}</div>
-              <h3 className="text-xl font-bold text-white mb-3">
-                {advantage.title}
-              </h3>
-              <p className="text-white/70 leading-relaxed">
-                {advantage.description}
-              </p>
-            </div>
+              <h3 className="text-2xl font-semibold text-[rgba(31,26,20,0.95)]">{advantage.title}</h3>
+              <p className="mt-4 text-base leading-7 text-muted">{advantage.description}</p>
+            </article>
           ))}
         </div>
 
-        {/* CTA Card */}
-        <div className="mt-12 fade-in" style={{ transitionDelay: '0.6s', opacity: 0 }}>
-          <div className="glass-strong rounded-3xl p-12 text-center relative overflow-hidden">
-            <div className="absolute -top-20 -right-20 w-60 h-60 bg-indigo-500/20 rounded-full blur-3xl" />
-            <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-purple-500/20 rounded-full blur-3xl" />
-            <div className="relative">
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Готовы начать?
-              </h3>
-              <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
-                Оставьте заявку и наш менеджер свяжется с вами в течение 15 минут
-              </p>
-              <a href="#contact" className="btn-primary inline-flex items-center gap-2">
-                Оставить заявку
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-            </div>
-          </div>
+        <div className="mt-10 text-center fade-in">
+          <a href="#contact" className="btn-primary">
+            Оставить заявку
+          </a>
         </div>
       </div>
     </section>

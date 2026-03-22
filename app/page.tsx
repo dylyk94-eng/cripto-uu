@@ -1,55 +1,47 @@
 'use client';
 
 import { useEffect } from 'react';
+import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Cities from '@/components/Cities';
 import Services from '@/components/Services';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
-import NeonCursor from '@/components/NeonCursor';
-import Particles from '@/components/Particles';
 
 export default function Home() {
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -30px 0px',
-    };
+    const elements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, observerOptions);
+    elements.forEach((element) => observer.observe(element));
 
-    const revealElements = document.querySelectorAll('.reveal');
-    revealElements.forEach((el) => observer.observe(el));
-
-    return () => {
-      revealElements.forEach((el) => observer.unobserve(el));
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
     <div className="relative min-h-screen">
-      {/* Effects Layer */}
-      <Particles />
-      <NeonCursor />
+      <Header />
 
-      {/* Main Content */}
       <main id="main" className="relative z-10" tabIndex={-1}>
         <Hero />
-        <div className="divider-neon" />
+        <div className="divider-line" />
         <Cities />
-        <div className="divider-neon" />
+        <div className="divider-line" />
         <Services />
-        <div className="divider-neon" />
+        <div className="divider-line" />
         <Contact />
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

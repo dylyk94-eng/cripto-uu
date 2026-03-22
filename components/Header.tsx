@@ -1,228 +1,141 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+const navItems = [
+  { href: '#cities', label: 'Города' },
+  { href: '#services', label: 'Услуги' },
+  { href: '#contact', label: 'Контакты' },
+];
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 18);
+    onScroll();
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close mobile menu on escape key
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isMobileMenuOpen) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isMobileMenuOpen]);
-
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
     };
   }, [isMobileMenuOpen]);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? 'glass-strong py-3' : 'py-5'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <Link
-          href="/"
-          className="flex items-center gap-3 group"
-          aria-label="CryptoX - Главная"
-        >
-          <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-indigo-500/30 transition-all duration-300">
-              <span className="text-white font-bold text-lg" aria-hidden="true">C</span>
-            </div>
-            <div className="absolute -inset-1 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-300" aria-hidden="true" />
+    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6">
+      <div
+        className={`mx-auto flex max-w-7xl items-center justify-between rounded-full border px-5 py-3 transition duration-300 ${
+          isScrolled
+            ? 'bg-[rgba(255,252,247,0.92)] shadow-[0_18px_40px_rgba(68,42,14,0.12)] backdrop-blur'
+            : 'bg-[rgba(255,252,247,0.7)] backdrop-blur'
+        }`}
+        style={{ borderColor: 'rgba(62, 43, 21, 0.12)' }}
+      >
+        <Link href="/" className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#115e59_0%,#d97706_100%)] text-sm font-bold text-white">
+            CE
           </div>
-          <span className="text-xl font-semibold text-white group-hover:text-indigo-400 transition-colors">
-            CryptoX
-          </span>
+          <div>
+            <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[rgba(17,94,89,0.84)]">
+              Crypto Exchange
+            </div>
+            <div className="text-xs text-[rgba(106,90,73,0.84)]">Офлайн обмен и сопровождение</div>
+          </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="Основная навигация">
-          <Link
-            href="#cities"
-            className="text-sm font-medium text-white/70 hover:text-white transition-colors relative group"
-            aria-label="Города"
-          >
-            Города
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 group-hover:w-full transition-all duration-300" aria-hidden="true" />
-          </Link>
-          <Link
-            href="#services"
-            className="text-sm font-medium text-white/70 hover:text-white transition-colors relative group"
-            aria-label="Условия"
-          >
-            Условия
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 group-hover:w-full transition-all duration-300" aria-hidden="true" />
-          </Link>
-          <Link
-            href="#contacts"
-            className="text-sm font-medium text-white/70 hover:text-white transition-colors relative group"
-            aria-label="Контакты"
-          >
-            Контакты
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 group-hover:w-full transition-all duration-300" aria-hidden="true" />
-          </Link>
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Основная навигация">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-medium text-[rgba(31,26,20,0.78)] transition hover:text-[rgba(17,94,89,1)]"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
-        {/* Desktop CTA */}
-        <Link
-          href="#contact"
-          className="btn-primary text-sm py-2.5 px-6 hidden md:block"
-          aria-label="Связаться с нами"
-        >
-          Связаться
-        </Link>
+        <div className="hidden md:block">
+          <a
+            href="https://t.me/Crypto_u_u"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+          >
+            Написать в Telegram
+          </a>
+        </div>
 
-        {/* Mobile Menu Button */}
         <button
-          className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 group"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+          type="button"
+          className="flex h-11 w-11 items-center justify-center rounded-full border md:hidden"
+          style={{ borderColor: 'rgba(62, 43, 21, 0.14)' }}
+          onClick={() => setIsMobileMenuOpen((open) => !open)}
           aria-expanded={isMobileMenuOpen}
-          aria-controls="mobile-menu"
+          aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
         >
-          <span
-            className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-              isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
-            }`}
-            aria-hidden="true"
-          />
-          <span
-            className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-              isMobileMenuOpen ? 'opacity-0' : ''
-            }`}
-            aria-hidden="true"
-          />
-          <span
-            className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-              isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
-            }`}
-            aria-hidden="true"
-          />
+          <span className="relative h-4 w-5">
+            <span
+              className={`absolute left-0 top-0 h-0.5 w-5 rounded-full bg-[rgba(31,26,20,0.88)] transition ${
+                isMobileMenuOpen ? 'translate-y-[7px] rotate-45' : ''
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-[7px] h-0.5 w-5 rounded-full bg-[rgba(31,26,20,0.88)] transition ${
+                isMobileMenuOpen ? 'opacity-0' : ''
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-[14px] h-0.5 w-5 rounded-full bg-[rgba(31,26,20,0.88)] transition ${
+                isMobileMenuOpen ? '-translate-y-[7px] -rotate-45' : ''
+              }`}
+            />
+          </span>
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
       <div
-        id="mobile-menu"
-        className={`md:hidden fixed inset-0 z-40 transition-all duration-300 ${
-          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 z-40 bg-[rgba(31,26,20,0.18)] backdrop-blur-sm transition md:hidden ${
+          isMobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
+        onClick={() => setIsMobileMenuOpen(false)}
       >
-        {/* Backdrop */}
-        <div
-          className="absolute inset-0 bg-black/80 backdrop-blur-md"
-          onClick={() => setIsMobileMenuOpen(false)}
-          aria-hidden="true"
-        />
-
-        {/* Menu Content */}
         <nav
-          className="absolute top-0 right-0 h-full w-72 bg-gradient-to-b from-[#111118] to-[#0a0a0f] border-l border-white/10 shadow-2xl transform transition-transform duration-300 ease-out"
-          style={{
-            transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
-          }}
-          aria-label="Мобильное меню"
+          className={`absolute right-4 top-20 w-[min(22rem,calc(100%-2rem))] rounded-[28px] border bg-[rgba(255,252,247,0.98)] p-6 shadow-[0_24px_48px_rgba(68,42,14,0.16)] transition ${
+            isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
+          }`}
+          style={{ borderColor: 'rgba(62, 43, 21, 0.12)' }}
+          onClick={(event) => event.stopPropagation()}
         >
-          <div className="p-6">
-            {/* Close Button */}
-            <button
-              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-white/70 hover:text-white transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Закрыть меню"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            {/* Logo */}
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-lg">C</span>
-              </div>
-              <span className="text-xl font-semibold text-white">CryptoX</span>
-            </div>
-
-            {/* Nav Links */}
-            <div className="space-y-4">
-              <Link
-                href="#cities"
-                className="block text-lg font-medium text-white/90 hover:text-indigo-400 transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Города
-              </Link>
-              <Link
-                href="#services"
-                className="block text-lg font-medium text-white/90 hover:text-indigo-400 transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Условия
-              </Link>
-              <Link
-                href="#contacts"
-                className="block text-lg font-medium text-white/90 hover:text-indigo-400 transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Контакты
-              </Link>
-            </div>
-
-            {/* CTA */}
-            <div className="mt-8">
-              <Link
-                href="#contact"
-                className="btn-primary w-full py-3 text-center"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Связаться
-              </Link>
-            </div>
-
-            {/* Social Links */}
-            <div className="mt-8 pt-6 border-t border-white/10">
-              <a
-                href="https://t.me/Crypto_u_u"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-white/70 hover:text-white transition-colors"
-              >
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.751-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.121.099.154.232.169.325.015.093.034.305.019.471z"/>
-                </svg>
-                <span>Telegram</span>
-              </a>
-            </div>
+          <div className="mb-6 text-sm font-semibold uppercase tracking-[0.18em] text-[rgba(17,94,89,0.84)]">
+            Навигация
           </div>
+          <div className="space-y-3">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="block rounded-2xl px-4 py-3 text-base font-medium text-[rgba(31,26,20,0.88)] transition hover:bg-[rgba(15,118,110,0.08)]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+          <a
+            href="https://t.me/Crypto_u_u"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary mt-6 w-full"
+          >
+            Написать в Telegram
+          </a>
         </nav>
       </div>
     </header>

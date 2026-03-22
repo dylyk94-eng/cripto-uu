@@ -1,68 +1,86 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 interface FormData {
+  city: string;
   name: string;
   phone: string;
+  telegram: string;
   currency: string;
+  amount: string;
+  message: string;
 }
 
 interface FormErrors {
   name?: string;
   phone?: string;
+  amount?: string;
 }
+
+const offices = [
+  {
+    city: 'Улан-Удэ',
+    address: 'ул. Балтахинова, 17',
+    schedule: 'Ежедневно, 12:00-18:00',
+    details: 'Подходит для стандартных обменов и личной консультации.',
+  },
+  {
+    city: 'Чита',
+    address: 'По предварительной заявке',
+    schedule: 'Время согласовывается с менеджером',
+    details: 'Для клиентов, которым нужен гибкий формат и персональная координация.',
+  },
+];
 
 export default function Contact() {
   const [formData, setFormData] = useState<FormData>({
+    city: 'Улан-Удэ',
     name: '',
     phone: '',
+    telegram: '',
     currency: '',
+    amount: '',
+    message: '',
   });
-
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'demo' | 'error'>('idle');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const formRef = useRef<HTMLFormElement>(null);
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
+  const validateForm = () => {
+    const nextErrors: FormErrors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = 'Обязательное поле';
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Минимум 2 символа';
+    if (formData.name.trim().length < 2) {
+      nextErrors.name = 'Укажите имя длиной не меньше 2 символов.';
     }
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Обязательное поле';
-    } else if (!/^\+?[\d\s\(\)\-]{10,}$/.test(formData.phone)) {
-      newErrors.phone = 'Формат: +7 XXX XXX XX XX';
+    if (!/^\+?[\d\s()-]{10,}$/.test(formData.phone.trim())) {
+      nextErrors.phone = 'Укажите телефон в корректном формате.';
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!formData.amount.trim()) {
+      nextErrors.amount = 'Добавьте сумму или ориентир по сделке.';
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+    setErrors((current) => ({ ...current, [name]: undefined }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
     if (!validateForm()) {
-      const firstErrorField = formRef.current?.querySelector('[aria-invalid="true"]') as HTMLElement;
-      if (firstErrorField) {
-        firstErrorField.focus();
-        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      const firstInvalidField = formRef.current?.querySelector('[aria-invalid="true"]') as HTMLElement | null;
+      firstInvalidField?.focus();
       return;
     }
 
@@ -70,336 +88,259 @@ export default function Contact() {
     setSubmitStatus('idle');
 
     try {
-      const res = await fetch('/api/submit', {
+      const response = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          city: 'Улан-Удэ',
-        }),
+        body: JSON.stringify(formData),
       });
 
-      const result = await res.json();
+      const result = await response.json();
 
       if (result.success) {
         setSubmitStatus(result.demo ? 'demo' : 'success');
-
-        if (formRef.current) {
-          formRef.current.reset();
-          setFormData({
-            name: '',
-            phone: '',
-            currency: '',
-          });
-        }
+        formRef.current?.reset();
+        setFormData({
+          city: 'Улан-Удэ',
+          name: '',
+          phone: '',
+          telegram: '',
+          currency: '',
+          amount: '',
+          message: '',
+        });
       } else {
         setSubmitStatus('error');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Submit error:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
-    }
-
-    if (submitStatus === 'success' || submitStatus === 'demo') {
-      setTimeout(() => setSubmitStatus('idle'), 5000);
+      window.setTimeout(() => setSubmitStatus('idle'), 5000);
     }
   };
 
-  const offices = [
-    {
-      city: 'Улан-Удэ',
-      address: 'ул. Балтахинова 17',
-      schedule: '12:00–18:00',
-      contact: '@Crypto_u_u',
-    },
-    {
-      city: 'Чита',
-      address: 'По заявке',
-      schedule: 'По согласованию',
-      contact: '@Crypto_u_u',
-    },
-  ];
-
   return (
-    <section id="contact" className="relative py-24 px-6">
-      {/* Binary Rain */}
-      <div className="binary-rain" />
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16 reveal" style={{ opacity: 0 }}>
-          <div className="inline-flex items-center gap-2 mb-8">
-            <div className="w-3 h-3 bg-neon-lime rounded-full animate-pulse" />
-            <span className="text-neon-cyan text-sm font-bold tracking-wider uppercase">
-              Contact Interface
-            </span>
+    <section id="contact" className="section-shell">
+      <div className="section-inner">
+        <div className="section-head reveal">
+          <div className="eyebrow">
+            <span className="eyebrow-dot" />
+            Контакт и заявка
           </div>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 glitch-text" data-text="УСТАНОВИТЬ СВЯЗЬ">
-            <span className="text-gradient-neon">УСТАНОВИТЬ</span>
-            <br />
-            СВЯЗЬ
+          <h2 className="max-w-3xl text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
+            Если нужно обсудить сделку, оставьте контакты или сразу напишите в Telegram
           </h2>
-          <p className="text-xl text-text-secondary max-w-3xl mx-auto">
-            Оставьте заявку или посетите наш офис для обмена криптовалюты
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
+            Оставьте основные данные, и мы свяжемся с вами.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Offices */}
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-neon-purple mb-8 flex items-center gap-3 reveal" style={{ opacity: 0, transitionDelay: '0.1s' }}>
-              <div className="w-12 h-12 bg-neon-purple/20 border border-neon-purple rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-neon-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
+            <div className="surface reveal">
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                Канал связи
               </div>
-              ОФИСЫ
-            </h3>
-            {offices.map((office, i) => (
-              <div
-                key={i}
-                className={`card-cyber border-neon-purple/20 reveal`}
-                style={{ opacity: 0, transitionDelay: `${(i + 2) * 0.15}s` }}
+              <h3 className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.95)]">
+                Самый быстрый способ начать
+              </h3>
+              <p className="mt-4 text-base leading-7 text-muted">
+                Напишите в Telegram, если хотите согласовать курс, сумму или формат встречи до
+                отправки формы.
+              </p>
+              <a
+                href="https://t.me/Crypto_u_u"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary mt-6"
               >
-                <h4 className={`text-2xl font-bold text-${office.city === 'Улан-Удэ' ? 'neon-cyan' : 'neon-pink'} mb-6`}>
-                  {office.city}
-                </h4>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-neon-cyan/20 border border-neon-cyan/30 rounded-lg flex items-center justify-center">
-                      <svg className="w-5 h-5 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <div className="text-lg text-text-primary">
-                      {office.address}
-                    </div>
+                Открыть Telegram
+              </a>
+            </div>
+
+            {offices.map((office, index) => (
+              <article
+                key={office.city}
+                className="surface reveal"
+                style={{ transitionDelay: `${0.12 + index * 0.08}s` }}
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <h3 className="text-2xl font-semibold text-[rgba(31,26,20,0.95)]">{office.city}</h3>
+                  <span className="rounded-full bg-[rgba(15,118,110,0.1)] px-3 py-1 text-sm font-semibold text-[rgba(17,94,89,0.88)]">
+                    На связи
+                  </span>
+                </div>
+                <div className="mt-5 space-y-4 text-sm leading-6 text-[rgba(31,26,20,0.82)]">
+                  <div>
+                    <div className="font-semibold text-[rgba(106,90,73,0.84)]">Адрес</div>
+                    <div>{office.address}</div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-neon-lime/20 border border-neon-lime/30 rounded-lg flex items-center justify-center">
-                      <svg className="w-5 h-5 text-neon-lime" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div className="text-lg text-text-primary">
-                      {office.schedule}
-                    </div>
+                  <div>
+                    <div className="font-semibold text-[rgba(106,90,73,0.84)]">График</div>
+                    <div>{office.schedule}</div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-neon-pink/20 border border-neon-pink/30 rounded-lg flex items-center justify-center">
-                      <svg className="w-5 h-5 text-neon-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <a
-                      href={`https://t.me/${office.contact.replace('@', '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-lg text-neon-cyan hover:text-neon-lime transition-colors font-semibold"
-                    >
-                      {office.contact}
-                    </a>
+                  <div>
+                    <div className="font-semibold text-[rgba(106,90,73,0.84)]">Комментарий</div>
+                    <div>{office.details}</div>
                   </div>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
 
-          {/* Form */}
-          <div className="reveal" style={{ opacity: 0, transitionDelay: '0.4s' }}>
-            <div className="card-cyber border-neon-cyan/20 p-10">
-              {/* Glitch Header */}
-              <h3 className="text-3xl font-black text-white mb-8 text-center glitch-text" data-text="БЫСТРАЯ ЗАЯВКА">
-                <span className="text-gradient-neon">БЫСТРАЯ ЗАЯВКА</span>
-              </h3>
-
-              {/* Status Messages */}
-              {submitStatus === 'success' && (
-                <div className="mb-8 p-4 bg-neon-lime/10 border border-neon-lime/30 rounded-xl text-neon-lime fade-in flex items-center gap-3" role="alert">
-                  <div className="w-10 h-10 bg-neon-lime/20 border border-neon-lime/30 rounded-full flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <strong className="text-lg">УСПЕХ!</strong> Менеджер свяжется с вами.
-                  </div>
-                </div>
-              )}
-              {submitStatus === 'demo' && (
-                <div className="mb-8 p-4 bg-neon-cyan/10 border border-neon-cyan/30 rounded-xl text-neon-cyan fade-in flex items-center gap-3" role="alert">
-                  <div className="w-10 h-10 bg-neon-cyan/20 border border-neon-cyan/30 rounded-full flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <strong className="text-lg">INFO:</strong> Demo-режим. Заявка записана.
-                  </div>
-                </div>
-              )}
-              {submitStatus === 'error' && (
-                <div className="mb-8 p-4 bg-neon-pink/10 border border-neon-pink/30 rounded-xl text-neon-pink fade-in flex items-center gap-3" role="alert">
-                  <div className="w-10 h-10 bg-neon-pink/20 border border-neon-pink/30 rounded-full flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </div>
-                  <div>
-                    <strong className="text-lg">ОШИБКА:</strong> Попробуйте ещё раз.
-                  </div>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-6" ref={formRef} noValidate>
-                {/* Name */}
-                <div>
-                  <label htmlFor="name" className="block text-sm font-bold text-neon-cyan mb-3 tracking-wider uppercase">
-                    ИМЯ <span className="text-neon-pink">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="ИВАН"
-                    required
-                    disabled={isSubmitting}
-                    className={`input-neon w-full ${errors.name ? 'border-neon-pink' : ''}`}
-                    aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? 'name-error' : undefined}
-                  />
-                  {errors.name && (
-                    <p id="name-error" className="mt-2 text-sm text-neon-pink flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                      </svg>
-                      {errors.name}
-                    </p>
-                  )}
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-bold text-neon-cyan mb-3 tracking-wider uppercase">
-                    ТЕЛЕФОН <span className="text-neon-pink">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="+7 999 999 99 99"
-                    required
-                    disabled={isSubmitting}
-                    className={`input-neon w-full ${errors.phone ? 'border-neon-pink' : ''}`}
-                    aria-invalid={!!errors.phone}
-                    aria-describedby={errors.phone ? 'phone-error' : undefined}
-                  />
-                  {errors.phone && (
-                    <p id="phone-error" className="mt-2 text-sm text-neon-pink flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                      </svg>
-                      {errors.phone}
-                    </p>
-                  )}
-                </div>
-
-                {/* Currency */}
-                <div>
-                  <label htmlFor="currency" className="block text-sm font-bold text-neon-cyan mb-3 tracking-wider uppercase">
-                    ВАЛЮТА <span className="text-neon-pink">*</span>
-                  </label>
-                  <select
-                    id="currency"
-                    name="currency"
-                    value={formData.currency}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                    className="input-neon w-full"
-                  >
-                    <option value="">ВЫБЕРИТЕ ВАЛЮТУ</option>
-                    <option value="USDT" className="bg-void">USDT</option>
-                    <option value="BTC" className="bg-void">BTC</option>
-                    <option value="ETH" className="bg-void">ETH</option>
-                    <option value="SOL" className="bg-void">SOL</option>
-                  </select>
-                </div>
-
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="btn-neon w-full py-5 text-xl flex items-center justify-center gap-3"
-                  aria-live="polite"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <svg className="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      ОТПРАВКА...
-                    </>
-                  ) : (
-                    <>
-                      ОТПРАВИТЬ ЗАЯВКУ
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                      </svg>
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {/* Alternative CTA */}
-              <div className="mt-8 pt-8 border-t border-white/10 text-center">
-                <p className="text-text-secondary mb-6 text-lg">
-                  ИЛИ НАПИШИТЕ ПРЯМО В TELEGRAM
-                </p>
-                <a
-                  href="https://t.me/Crypto_u_u"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-neon-secondary w-full py-4 flex items-center justify-center gap-3 text-lg"
-                >
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.751-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.121.099.154.232.169.325.015.093.034.305.019.471z"/>
-                  </svg>
-                  ТЕЛЕГРАМ
-                </a>
+          <div className="surface-strong reveal" style={{ transitionDelay: '0.1s' }}>
+            <div className="mb-6">
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
+                Заявка
               </div>
+              <h3 className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.95)]">
+                Форма заявки
+              </h3>
             </div>
+
+            {submitStatus === 'success' && (
+              <div className="mb-5 rounded-2xl border border-[rgba(47,133,90,0.22)] bg-[rgba(47,133,90,0.1)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
+                Заявка отправлена. Менеджер свяжется с вами в ближайшее время.
+              </div>
+            )}
+            {submitStatus === 'demo' && (
+              <div className="mb-5 rounded-2xl border border-[rgba(217,119,6,0.22)] bg-[rgba(217,119,6,0.1)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
+                Сейчас включен demo-режим. Заявка записана локально и показана в консоли сервера.
+              </div>
+            )}
+            {submitStatus === 'error' && (
+              <div className="mb-5 rounded-2xl border border-[rgba(185,28,28,0.18)] bg-[rgba(185,28,28,0.08)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
+                Не удалось отправить заявку. Попробуйте еще раз или свяжитесь с нами в Telegram.
+              </div>
+            )}
+
+            <form ref={formRef} onSubmit={handleSubmit} className="grid gap-5 md:grid-cols-2">
+              <div className="md:col-span-1">
+                <label htmlFor="city" className="field-label">
+                  Город
+                </label>
+                <select
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="input-base"
+                >
+                  <option value="Улан-Удэ">Улан-Удэ</option>
+                  <option value="Чита">Чита</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="currency" className="field-label">
+                  Валюта
+                </label>
+                <select
+                  id="currency"
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  className="input-base"
+                >
+                  <option value="">Выберите направление</option>
+                  <option value="USDT">USDT</option>
+                  <option value="BTC">BTC</option>
+                  <option value="ETH">ETH</option>
+                  <option value="SOL">SOL</option>
+                  <option value="Другое">Другое</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="name" className="field-label">
+                  Имя
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="input-base"
+                  placeholder="Как к вам обращаться"
+                  aria-invalid={Boolean(errors.name)}
+                />
+                {errors.name && <p className="mt-2 text-sm text-[rgba(185,28,28,0.82)]">{errors.name}</p>}
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="phone" className="field-label">
+                  Телефон
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="input-base"
+                  placeholder="+7 999 999 99 99"
+                  aria-invalid={Boolean(errors.phone)}
+                />
+                {errors.phone && <p className="mt-2 text-sm text-[rgba(185,28,28,0.82)]">{errors.phone}</p>}
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="telegram" className="field-label">
+                  Telegram
+                </label>
+                <input
+                  id="telegram"
+                  name="telegram"
+                  value={formData.telegram}
+                  onChange={handleChange}
+                  className="input-base"
+                  placeholder="@username"
+                />
+              </div>
+
+              <div className="md:col-span-1">
+                <label htmlFor="amount" className="field-label">
+                  Сумма
+                </label>
+                <input
+                  id="amount"
+                  name="amount"
+                  value={formData.amount}
+                  onChange={handleChange}
+                  className="input-base"
+                  placeholder="Например, 5000 USDT или 300 000 RUB"
+                  aria-invalid={Boolean(errors.amount)}
+                />
+                {errors.amount && <p className="mt-2 text-sm text-[rgba(185,28,28,0.82)]">{errors.amount}</p>}
+              </div>
+
+              <div className="md:col-span-2">
+                <label htmlFor="message" className="field-label">
+                  Комментарий
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={4}
+                  className="input-base resize-none"
+                  placeholder="Можно коротко описать задачу или удобное время для связи"
+                />
+              </div>
+
+              <div className="md:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm leading-6 text-muted">
+                  Отправляя форму, вы соглашаетесь на обратную связь по указанным контактам.
+                </p>
+                <button type="submit" className="btn-primary min-w-[12rem]" disabled={isSubmitting}>
+                  {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        .reveal {
-          animation: slide 0.8s ease forwards;
-        }
-
-        .fade-in {
-          animation: fadeInUp 0.6s ease forwards;
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </section>
   );
 }

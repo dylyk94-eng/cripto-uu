@@ -1,26 +1,24 @@
 'use client';
 
-export default function Marquee() {
-  const items = [
-    '🔒 100% безопасность',
-    '⚡ Обмен за 15 минут',
-    '💰 Лучший курс',
-    '👨‍💼 Менеджер 24/7',
-    '🌍 Международные платежи',
-    '✅ 98% довольных клиентов',
-    '🏢 Офисы в Улан-Удэ и Чите',
-  ];
+const items = [
+  'Офлайн обмен с личным сопровождением',
+  'Условия сделки согласуем заранее',
+  'Поддержка в Telegram без долгого ожидания',
+  'Работаем с типовыми и нестандартными запросами',
+  'Улан-Удэ и Чита',
+];
 
+export default function Marquee() {
   return (
-    <div className="py-4 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 border-y border-white/5 overflow-hidden">
+    <div className="overflow-hidden border-y border-[rgba(62,43,21,0.08)] bg-[rgba(255,252,247,0.55)] py-4">
       <div className="flex gap-8 whitespace-nowrap animate-marquee">
         {[...items, ...items, ...items].map((item, index) => (
           <span
             key={`${item}-${index}`}
-            className="text-white/80 font-semibold text-sm inline-flex items-center gap-2"
+            className="inline-flex items-center gap-3 text-sm font-medium text-[rgba(31,26,20,0.76)]"
           >
+            <span className="h-2 w-2 rounded-full bg-[rgba(15,118,110,0.78)]" />
             {item}
-            <span className="text-white/30">•</span>
           </span>
         ))}
       </div>

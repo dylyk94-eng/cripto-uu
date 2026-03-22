@@ -1,107 +1,66 @@
 'use client';
 
-import { useState } from 'react';
+const steps = [
+  {
+    number: '01',
+    title: 'Пишете или оставляете заявку',
+    description: 'Коротко описываете задачу: город, валюту, сумму и удобный формат связи.',
+  },
+  {
+    number: '02',
+    title: 'Согласуем условия',
+    description: 'Подтверждаем направление, ориентир по курсу, время и формат проведения сделки.',
+  },
+  {
+    number: '03',
+    title: 'Проводим обмен',
+    description: 'Если сценарий подходит обеим сторонам, переходим к сделке без лишних промежуточных шагов.',
+  },
+  {
+    number: '04',
+    title: 'Остаемся на связи',
+    description: 'После завершения можно вернуться с повторным запросом или уточнить сопутствующие вопросы.',
+  },
+];
 
 export default function HowItWorks() {
-  const [activeStep, setActiveStep] = useState(0);
-
-  const steps = [
-    {
-      number: '01',
-      title: 'Оставьте заявку',
-      description: 'Заполните форму на сайте или напишите нам в Telegram. Укажите сумму и валюту для обмена.',
-      icon: '📝',
-    },
-    {
-      number: '02',
-      title: 'Связь с менеджером',
-      description: 'Наш менеджер свяжется с вами в течение 15 минут. Подтвердит детали и согласует курс.',
-      icon: '📞',
-    },
-    {
-      number: '03',
-      title: 'Проведение обмена',
-      description: 'Встречаемся в офисе или проводим онлайн-обмен. Фиксируем курс и обмениваем криптовалюту.',
-      icon: '💱',
-    },
-    {
-      number: '04',
-      title: 'Получение средств',
-      description: 'Получите рубли на карту или наличными.整个过程 занимает не более 15 минут!',
-      icon: '✅',
-    },
-  ];
-
   return (
-    <section className="py-20 px-6 relative">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16 fade-in">
-          <div className="inline-flex items-center gap-2 mb-6">
-            <span className="badge">Просто</span>
+    <section className="section-shell">
+      <div className="section-inner">
+        <div className="section-head fade-in text-center md:mx-auto">
+          <div className="eyebrow">
+            <span className="eyebrow-dot" />
+            Как это работает
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Как <span className="gradient-text">работает</span> обмен
+          <h2 className="text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
+            Четыре шага без лишней сложности
           </h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Весь процесс занимает не более 15 минут. 4 простых шага — и крипта ваша!
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-muted">
+            Переписали блок так, чтобы процесс был понятен с первого экрана и не звучал как рекламная заготовка.
           </p>
         </div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Connecting Line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500 hidden md:block" />
-
-          <div className="grid md:grid-cols-2 gap-12">
-            {steps.map((step, index) => (
-              <div
-                key={index}
-                className={`relative fade-in ${activeStep === index ? 'active' : ''}`}
-                style={{ transitionDelay: `${index * 0.15}s`, opacity: 0 }}
-                onMouseEnter={() => setActiveStep(index)}
-              >
-                {/* Step Number Card */}
-                <div
-                  className={`absolute top-0 ${
-                    index % 2 === 0 ? '-right-6' : '-left-6'
-                  } w-12 h-12 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg md:block hidden`}
-                >
-                  <span className="text-white font-bold">{step.number}</span>
-                </div>
-
-                {/* Content */}
-                <div className={`glass p-8 rounded-3xl hover:bg-white/10 transition-all duration-500 ${activeStep === index ? 'border-indigo-500/50' : ''} md:ml-0 ml-12`}>
-                  {/* Icon */}
-                  <div className={`text-6xl mb-6 ${activeStep === index ? 'scale-110' : ''} transition-transform duration-300`}>
-                    {step.icon}
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-2xl font-bold text-white mb-4">
-                    {step.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-white/70 leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {steps.map((step, index) => (
+            <article
+              key={step.number}
+              className="surface fade-in"
+              style={{ transitionDelay: `${index * 0.08}s` }}
+            >
+              <div className="text-sm font-semibold uppercase tracking-[0.18em] text-[rgba(217,119,6,0.92)]">
+                Шаг {step.number}
               </div>
-            ))}
-          </div>
+              <h3 className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)]">
+                {step.title}
+              </h3>
+              <p className="mt-4 text-base leading-7 text-muted">{step.description}</p>
+            </article>
+          ))}
         </div>
 
-        {/* CTA */}
-        <div className="mt-16 text-center fade-in" style={{ transitionDelay: '0.6s', opacity: 0 }}>
-          <a
-            href="#contact"
-            className="btn-primary inline-flex items-center gap-2 text-lg px-10 py-4"
-          >
-            Начать сейчас
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
+        <div className="mt-10 text-center fade-in">
+          <a href="#contact" className="btn-primary">
+            Перейти к заявке
           </a>
         </div>
       </div>
